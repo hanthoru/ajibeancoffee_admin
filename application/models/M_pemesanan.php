@@ -32,5 +32,11 @@ function ambil_id_gambar($id)
       return $result->row();//ambil datanya berdasrka row id
     }
 }
+function insert_cart($data){
+    return $this->db->insert_batch('transaksi', $data);
+}
+function update_batch_stok($table, $data, $field){
+    $this->db->update_batch($table, $data, $field); 
+}
 }
 ?>

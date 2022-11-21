@@ -14,6 +14,8 @@ class Produk extends CI_Controller{
         $this->load->library('cart');
     }
 
+    // CRUD data Produk
+
     function do_upload(){
         $config['upload_path']          = 'upload/images';  // folder upload 
         $config['allowed_types']        = 'jpg|png'; // jenis file
@@ -101,44 +103,147 @@ class Produk extends CI_Controller{
             }else {
             echo "tidak masuk";
             }
-
     }
 
-    function add_transaksi_action(){
-        $nama_customer = $this->input->post('customer');
-        $produk_transaksi = $this->input->post('produk');
-        $quantity = $this->input->post('quantity');
-        $harga = $this->db->query("select harga from produk where id_produk=$produk_transaksi")->row()->harga;
-        $stok = $this->db->query("select stok from produk where id_produk=$produk_transaksi")->row()->stok;
+    // End of CRUD data Produk
 
-        $this->form_validation->set_rules('customer','Nama Customer','required');
-        $this->form_validation->set_rules('produk','Nama Produkr','required');
-        $this->form_validation->set_rules('quantity','Jumlah','required');
+
+    // Ajax Cart
+    function add_cart(){ 
+        //ambil produk berdasarkan id 
+		$data = array(
+			'id' => $this->input->post('id_produk'), 
+			'name' => $this->input->post('nama_produk'), 
+			'price' => $this->input->post('harga'), 
+			'qty' => $this->input->post('quantity'), 
+		);
+
+		$this->cart->insert($data);
+
+        echo $this->show_cart(); 
+	}
+
+    function show_cart(){ 
+		$output = '';
+		$no = 0;
+		foreach ($this->cart->contents() as $items) {
+			$no++;
+			$output .='
+				<tr>
+					<td>'.$items['name'].'</td>
+					<td>'.number_format($items['price']).'</td>
+					<td>'.$items['qty'].'</td>
+					<td>'.number_format($items['subtotal']).'</td>
+					<td><button type="button" id="'.$items['rowid'].'" class="hapus_cart btn btn-danger btn-sm">Cancel</button></td>
+				</tr>
+			';
+		}
+		$output .= '
+			<tr>
+				<th colspan="3">Total</th>
+				<th colspan="2">'.'Rp '.number_format($this->cart->total()).'</th>
+			</tr>
+		';
+		return $output;
+	}
+
+    function load_cart(){ 
+		echo $this->show_cart();
+	}
+
+    public function checkout(){
+        $i = 1;
+
+        foreach ($this->cart->contents() as $items) {
+            
+            //tampung data dari form
+            $id = $items['id'];
+            $nama_cust   = "Budi";
+            $produk = $items['id'];
+            $qty = $items['qty'];
+            $total_harga  = $items['subtotal'];
+            $tanggal = date("Y-m-d");
+            
+            $stok = $this->db->query("select stok from produk where id_produk=$id")->row()->stok;
+
+            $data= array(
+                array(
+                    'nama_customer' => $nama_cust,
+                    'produk_transaksi' => $produk,
+                    'total_harga' => $total_harga,
+                    'quantity' => $qty,
+                    'tanggal_transaksi' => $tanggal
+                )
+            );
+
+            $coba = json_encode($data);
+            $coba2 = json_decode($coba, true);
+            
+            $stok_baru = $stok - $qty;
+
+            $stok_field = array(
+                array(
+                    'id_produk' =>$id,
+                    'stok' => $stok_baru
+                )
+            );
+
+            $this->m_pemesanan->update_batch_stok('produk', $stok_field, 'id_produk'); 
+            $this->m_pemesanan->insert_cart($coba2);
+            
+		}
+        $this->cart->destroy($items);
+        redirect('dashboard/menu_list');
+    }
+
+    function delete_cart(){ //fungsi untuk menghapus item cart
+        $data = array(
+            'rowid' => $this->input->post('row_id'), 
+            'qty' => 0, 
+        );
+        $this->cart->update($data);
+        echo $this->show_cart();
+    }
+    // End of Ajax Cart
+
+
+    // === Ga perlu insert satu-satu lagi ===
+
+    // function add_transaksi_action(){
+    //     $nama_customer = $this->input->post('customer');
+    //     $produk_transaksi = $this->input->post('produk');
+    //     $quantity = $this->input->post('quantity');
+    //     $harga = $this->db->query("select harga from produk where id_produk=$produk_transaksi")->row()->harga;
+    //     $stok = $this->db->query("select stok from produk where id_produk=$produk_transaksi")->row()->stok;
+
+    //     $this->form_validation->set_rules('customer','Nama Customer','required');
+    //     $this->form_validation->set_rules('produk','Nama Produkr','required');
+    //     $this->form_validation->set_rules('quantity','Jumlah','required');
 
         
-        if($this->form_validation->run() != false){
-            $total_harga = $harga * $quantity;
-            $stok_baru   = $stok - $quantity;
+    //     if($this->form_validation->run() != false){
+    //         $total_harga = $harga * $quantity;
+    //         $stok_baru   = $stok - $quantity;
 
-            $data = array(
-                'nama_customer' => $nama_customer,
-                'produk_transaksi' => $produk_transaksi,
-                'total_harga' => $total_harga,
-                'quantity' => $quantity,
-                'tanggal_transaksi' => date('Y-m-d') 
-            );
-            $this->m_pemesanan->insert_data($data,'transaksi');
+    //         $data = array(
+    //             'nama_customer' => $nama_customer,
+    //             'produk_transaksi' => $produk_transaksi,
+    //             'total_harga' => $total_harga,
+    //             'quantity' => $quantity,
+    //             'tanggal_transaksi' => date('Y-m-d') 
+    //         );
+    //         $this->m_pemesanan->insert_data($data,'transaksi');
 
-              $d = array(
-                'stok' => $stok_baru
-              );
-              $w = array(
-                'id_produk' => $produk_transaksi
-              );
-              $this->m_pemesanan->update_data($w,$d,'produk');
-              redirect(base_url().'dashboard/transaksi');
-        }
-    }
+    //           $d = array(
+    //             'stok' => $stok_baru
+    //           );
+    //           $w = array(
+    //             'id_produk' => $produk_transaksi
+    //           );
+    //           $this->m_pemesanan->update_data($w,$d,'produk');
+    //           redirect(base_url().'dashboard/transaksi');
+    //     }
+    // }
 
     function transaksi_delete($id){
         $produk_transaksi = $this->db->query("select produk_transaksi from transaksi where id_transaksi=$id")->row()->produk_transaksi;

@@ -32,4 +32,10 @@ class Dashboard extends CI_Controller{
         $this->load->view('v_transaksi',$data);
         $this->load->view('v_footer');
     }
+
+    function kasir(){
+        $data['produk']=$this->m_pemesanan->get_data('produk')->result();
+        $this->load->view('v_header');
+        $this->load->view('v_kasir', $data);
+    }
 }

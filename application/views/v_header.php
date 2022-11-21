@@ -42,7 +42,10 @@
             <a class="nav-link mr-4" href="<?php echo base_url().'dashboard/menu_list'; ?>"><img src="<?php echo base_url().'asset/image/menu.png'; ?>" alt="" style="width:20px;height:20px;"> DAFTAR PRODUK</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link mr-4" href="<?php echo base_url().'dashboard/transaksi'; ?>"><img src="<?php echo base_url().'asset/image/dp.png'; ?>" alt="" style="width:20px;height:20px;"> TRANSAKSI</a>
+            <a class="nav-link mr-4" href="<?php echo base_url().'dashboard/transaksi'; ?>"><img src="<?php echo base_url().'asset/image/dp.png'; ?>" alt="" style="width:20px;height:20px;"> DAFTAR TRANSAKSI</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link mr-4" href="<?php echo base_url().'dashboard/kasir'; ?>"><img src="<?php echo base_url().'asset/image/dp.png'; ?>" alt="" style="width:20px;height:20px;"> KASIR</a>
           </li>
           <li class="nav-item">
             <a class="nav-link mr-4" href="<?php echo base_url().'welcome/logout'; ?>"><img src="<?php echo base_url().'asset/image/logout.png'; ?>" alt="" style="width:20px;height:20px;"> LOGOUT</a>
