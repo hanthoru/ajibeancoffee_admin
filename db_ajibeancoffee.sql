@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 27, 2022 at 09:19 AM
--- Server version: 10.4.21-MariaDB
--- PHP Version: 7.4.23
+-- Generation Time: Nov 22, 2022 at 04:15 AM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `produk` (
   `id_produk` int(11) NOT NULL,
   `nama_produk` varchar(20) NOT NULL,
+  `jenis_menu` varchar(10) NOT NULL,
   `stok` varchar(3) NOT NULL,
   `harga` varchar(7) NOT NULL,
   `gambar` varchar(255) NOT NULL
@@ -39,11 +40,10 @@ CREATE TABLE `produk` (
 -- Dumping data for table `produk`
 --
 
-INSERT INTO `produk` (`id_produk`, `nama_produk`, `stok`, `harga`, `gambar`) VALUES
-(68, 'kopi', '5', '1000', 'istockphoto-1163872551-612x612.jpg'),
-(69, 'kopi 2', '0', '2000', 'istockphoto-1163872551-612x6121.jpg'),
-(70, 'kopi 3', '0', '3000', 'istockphoto-1163872551-612x6122.jpg'),
-(71, 'kopi 4', '10', '2500', 'istockphoto-1163872551-612x6123.jpg');
+INSERT INTO `produk` (`id_produk`, `nama_produk`, `jenis_menu`, `stok`, `harga`, `gambar`) VALUES
+(1, 'Kopi 1', '', '5', '200000', 'bg_login1.png'),
+(2, 'Kopi 2', '', '6', '2000000', 'Eimi1.jpg'),
+(4, 'Kopi 3', '', '6', '3000', 'istockphoto-1163872551-612x61221.jpg');
 
 -- --------------------------------------------------------
 
@@ -53,24 +53,26 @@ INSERT INTO `produk` (`id_produk`, `nama_produk`, `stok`, `harga`, `gambar`) VAL
 
 CREATE TABLE `transaksi` (
   `id_transaksi` int(11) NOT NULL,
-  `tanggal_transaksi` datetime NOT NULL,
-  `total_harga` int(12) NOT NULL,
-  `produk_transaksi` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `nama_customer` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `nama_customer` varchar(50) NOT NULL,
+  `produk_transaksi` int(3) NOT NULL,
+  `total_harga` int(4) NOT NULL,
+  `quantity` int(3) NOT NULL,
+  `tanggal_transaksi` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `transaksi`
 --
 
-INSERT INTO `transaksi` (`id_transaksi`, `tanggal_transaksi`, `total_harga`, `produk_transaksi`, `quantity`, `nama_customer`) VALUES
-(35, '2022-06-27 00:00:00', 5000, 67, 5, 'Ujang'),
-(36, '2022-06-27 00:00:00', 5000, 67, 5, 'Saipul'),
-(39, '2022-06-27 00:00:00', 15000, 70, 5, 'Ujang'),
-(40, '2022-06-27 00:00:00', 15000, 70, 5, 'Saipul'),
-(41, '2022-06-27 00:00:00', 5000, 68, 5, 'Asep'),
-(42, '2022-06-27 00:00:00', 20000, 69, 10, 'Mamat');
+INSERT INTO `transaksi` (`id_transaksi`, `nama_customer`, `produk_transaksi`, `total_harga`, `quantity`, `tanggal_transaksi`) VALUES
+(49, 'Budi', 1, 200000, 1, '2022-11-21'),
+(50, 'Budi', 2, 4000000, 2, '2022-11-21'),
+(51, 'Budi', 4, 9000, 3, '2022-11-21'),
+(52, 'Budi', 1, 400000, 2, '2022-11-21'),
+(53, 'Budi', 2, 4000000, 2, '2022-11-21'),
+(54, 'Budi', 4, 6000, 2, '2022-11-21'),
+(55, 'Sigit', 1, 400000, 2, '2022-11-22'),
+(56, 'Sigit', 4, 3000, 1, '2022-11-22');
 
 -- --------------------------------------------------------
 
@@ -121,13 +123,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `produk`
 --
 ALTER TABLE `produk`
-  MODIFY `id_produk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id_produk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `user`
