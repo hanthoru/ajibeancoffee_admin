@@ -44,6 +44,8 @@ class Produk extends CI_Controller{
                 'harga' => $harga,
                 'gambar' => $gambar,
             );
+            
+            $this->session->set_flashdata("produk", "Di Tambah");
             $this->m_pemesanan->insert_data($data,'produk');
             redirect('dashboard/menu_list');
        }
@@ -55,6 +57,8 @@ class Produk extends CI_Controller{
     // lokasi gambar berada
     $path = './upload/images/';
     @unlink($path.$data->gambar);// hapus data di folder dimana data tersimpan
+
+    $this->session->set_flashdata("produk", "Di Hapus");
     $this->m_pemesanan->delete_data($id, 'id_produk','produk');
     redirect('dashboard/menu_list');
     }
@@ -94,8 +98,9 @@ class Produk extends CI_Controller{
                 // hapus foto pada direktori
                 @unlink($path.$this->input->post('gambarlama'));
 
+                $this->session->set_flashdata("produk", "Di Update");
                 $this->m_pemesanan->update_data($where,$data,'produk');
-                // var_dump($data);
+
                 redirect('dashboard/menu_list',$data);
                 }   else {
                 die("gagal update");
@@ -188,12 +193,14 @@ class Produk extends CI_Controller{
                 )
             );
 
+            $this->session->set_flashdata("transaksi", "Di Tambah");
+
             $this->m_pemesanan->update_batch_stok('produk', $stok_field, 'id_produk'); 
             $this->m_pemesanan->insert_cart($coba2);
             
 		}
         $this->cart->destroy($items);
-        redirect('dashboard/menu_list');
+        redirect('dashboard/transaksi');
     }
 
     function delete_cart(){ //fungsi untuk menghapus item cart
@@ -263,8 +270,12 @@ class Produk extends CI_Controller{
         $stok = array(
             'stok' => $stok_after_deletion
         );
+
+        $this->session->set_flashdata("transaksi", "Di Hapus");
+
         $this->m_pemesanan->update_data($id_produk,$stok,'produk');
         $this->m_pemesanan->delete_data($id,'id_transaksi','transaksi');
+        
         redirect(base_url().'dashboard/transaksi');
     }
 
@@ -322,6 +333,9 @@ class Produk extends CI_Controller{
                 'total_harga' => $total_harga,
                 'quantity' => $quantity_new,
             );
+
+            $this->session->set_flashdata("transaksi", "Di Hapus");
+
             $this->m_pemesanan->update_data($where,$data,'transaksi');
 
             redirect(base_url().'dashboard/transaksi');

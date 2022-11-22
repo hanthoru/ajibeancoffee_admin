@@ -5,4 +5,7 @@
     <a href="https://web.facebook.com/ajibeancoffee?_rdc=1&_rdr"><i class="fa-brands fa-facebook mr-1"  style="color:white;"></i></link>
     <a href="http://ajibean.com/"><i class="fa-brands fa-wordpress" style="color:white;"></i></a>
   </div>
+  <script src="<?= base_url(); ?>asset/js/sweetalert/sweetalert2.all.min.js"></script>
+  <script src="<?= base_url(); ?>asset/js/myScript.js"></script>
+  
 </footer>

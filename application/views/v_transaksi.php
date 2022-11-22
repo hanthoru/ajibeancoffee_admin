@@ -1,7 +1,8 @@
 <body>
 <div class="container">
     <div class=" table-responsive mt-3">
-    
+    <div class="flashdata_transaksi" data-flashdata="<?= $this->session->flashdata('transaksi');?>"></div>
+
     <!-- Tabel Penjualan -->
         <table class="table table-sm table-bordered table-striped" id="tabeluser">
             <thead>
@@ -31,7 +32,7 @@
                         <td><?php echo date('d/m/Y',strtotime($t->tanggal_transaksi)); ?></td>
                         <td>
                             <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#edittransaksi<?= $t->id_transaksi ?>"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-                            <a class="btn btn-danger btn-sm" href="<?php echo base_url().'produk/transaksi_delete/'.$t->id_transaksi; ?>"><i class="fa-solid fa-trash-can" style="color:white;"></i> Hapus</a>
+                            <a class="btn btn-danger btn-sm btn_hapus_transaksi" href="<?php echo base_url().'produk/transaksi_delete/'.$t->id_transaksi; ?>"><i class="fa-solid fa-trash-can" style="color:white;"></i> Hapus</a>
                         </td>
                     </tr>
                     <?php

@@ -5,6 +5,8 @@
         <i class="fa-solid fa-plus" style="color:white;"></i> Tambah
         </button>
 
+        <div class="flashdata_produk" data-flashdata="<?= $this->session->flashdata('produk');?>"></div>
+
     <!-- Modal Tambah -->
     <div class="modal fade" id="tambahitem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -53,7 +55,7 @@
                     <label class="card-text harga">Stok <?php echo $p->stok ?></label><br>
                     <label class="card-text harga">Rp.<?php echo number_format($p->harga, 2, ",", ".");?></label><br>
                     <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalEdit<?= $p->id_produk ?>"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-                    <a href="<?php echo base_url().'produk/delete_produk/'.$p->id_produk; ?>" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can" style="color:white;"></i> Hapus</a>
+                    <a href="<?php echo base_url().'produk/delete_produk/'.$p->id_produk; ?>" class="btn btn-danger btn-sm btn_hapus_produk"><i class="fa-solid fa-trash-can" style="color:white;"></i> Hapus</a>
                 </div>
             </div>
         </div>
