@@ -11,6 +11,7 @@
 	<div class="row">
 		<div class="col-md-8">
 			<h4>Produk</h4>
+
 			<div class="row">
                 <?php foreach($produk as $p){ ?>
                     <div class="col-md-4">
@@ -37,23 +38,30 @@
                 <?php } ?>
 		    </div>
 		</div>
+
 		<div class="col-md-4">
 			<h4>Shopping Cart</h4>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>Produk</th>
-						<th>Harga</th>
-						<th>Qty</th>
-						<th>Subtotal</th>
-						<th>Aksi</th>
-					</tr>
-				</thead>
-				<tbody id="detail_cart">
-
-				</tbody>
-			</table>
-			<a href="<?php echo base_url().'produk/checkout'; ?>" class="checkout btn btn-primary btn-outline-light">Beli</a>
+			<?php echo form_open_multipart(base_url().'produk/checkout'); ?>
+				<div class="form-group">
+					<label for="customer">Nama Customer</label>
+					<input name="nama_cust" type="text" class="form-control" id="nama_cust">
+				</div>  
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Produk</th>
+							<th>Harga</th>
+							<th>Qty</th>
+							<th>Subtotal</th>
+							<th>Aksi</th>
+						</tr>
+					</thead>
+					<tbody id="detail_cart">
+						
+						</tbody>
+					</table>
+					<input class="btn btn-primary btn-outline-light" type="submit" value="Beli">
+			<?php echo form_close() ?>
 		</div>
 	</div>
 </div>
@@ -96,5 +104,9 @@
 		});
 	});
 </script>
+<br>
+<br>
+<br>
+<br>	
 </body>
 </html>

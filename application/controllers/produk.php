@@ -158,7 +158,7 @@ class Produk extends CI_Controller{
             
             //tampung data dari form
             $id = $items['id'];
-            $nama_cust   = "Budi";
+            $nama_cust  = $this->input->post('nama_cust');
             $produk = $items['id'];
             $qty = $items['qty'];
             $total_harga  = $items['subtotal'];
