@@ -37,5 +37,6 @@ class Dashboard extends CI_Controller{
         $data['produk']=$this->m_pemesanan->get_data('produk')->result();
         $this->load->view('v_header');
         $this->load->view('v_kasir', $data);
+        $this->load->view('v_footer');
     }
 }

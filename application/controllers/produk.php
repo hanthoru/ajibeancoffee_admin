@@ -115,7 +115,6 @@ class Produk extends CI_Controller{
 
     // Ajax Cart
     function add_cart(){ 
-        //ambil produk berdasarkan id 
 		$data = array(
 			'id' => $this->input->post('id_produk'), 
 			'name' => $this->input->post('nama_produk'), 
@@ -123,25 +122,35 @@ class Produk extends CI_Controller{
 			'qty' => $this->input->post('quantity'), 
 		);
 
-		$this->cart->insert($data);
-
+        $this->cart->insert($data);
         echo $this->show_cart(); 
+
 	}
 
     function show_cart(){ 
 		$output = '';
 		$no = 0;
 		foreach ($this->cart->contents() as $items) {
-			$no++;
-			$output .='
+
+            $id = $items['id'];
+
+            $query_stok = $this->db->query("select stok from produk where id_produk=$id")->row()->stok;
+
+                $no++;
+                $output .='
 				<tr>
-					<td>'.$items['name'].'</td>
-					<td>'.number_format($items['price']).'</td>
-					<td>'.$items['qty'].'</td>
-					<td>'.number_format($items['subtotal']).'</td>
-					<td><button type="button" id="'.$items['rowid'].'" class="hapus_cart btn btn-danger btn-sm">Cancel</button></td>
+                    <td>'.$items['name'].'</td>
+                    <td>'.number_format($items['price']).'</td>
+                    <td>
+                        <div class="col-md-4">
+                        <input type="number" name="quantity_produk" id="'.$items['rowid'].'" value="'.$items['qty'].'" min="1" max="'.$query_stok.'" class="quantity '.$id.' ">
+                    </div>
+                    </td>
+                    <td>'.number_format($items['subtotal']).'</td>
+                    <td><button type="button" id="'.$items['rowid'].'" class="hapus_cart btn btn-danger btn-sm">Cancel</button></td>
 				</tr>
-			';
+                ';
+            
 		}
 		$output .= '
 			<tr>
@@ -157,7 +166,6 @@ class Produk extends CI_Controller{
 	}
 
     public function checkout(){
-        $i = 1;
 
         foreach ($this->cart->contents() as $items) {
             
@@ -201,6 +209,15 @@ class Produk extends CI_Controller{
 		}
         $this->cart->destroy($items);
         redirect('dashboard/transaksi');
+    }
+
+    function update_cart(){
+        $data = array(
+            'rowid' => $this->input->post('row_id'), 
+            'qty' => $this->input->post('stok'), 
+        );
+        $this->cart->update($data);
+        echo $this->show_cart();
     }
 
     function delete_cart(){ //fungsi untuk menghapus item cart

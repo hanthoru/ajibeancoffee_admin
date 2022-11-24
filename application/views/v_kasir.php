@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Shopping cart dengan codeigniter dan AJAX</title>
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url().'asset/css/bootstrap.css'?>">
-</head>
 <body>
+<div class="notif_stok" data-flashdata="<?= $this->session->flashdata('notif_stok');?>"></div>
 <div class="container"><br/>
 	<h2>Shopping Cart Dengan Ajax dan Codeigniter</h2>
 	<hr/>
@@ -21,17 +16,18 @@
                                 <h5 class="card-title font-weight-bold"><?php echo $p->nama_produk ?></h5>
                                 <div class="row">
                                     <div class="col-md-7">
-                                        <label class="card-text harga">Stok <?php echo $p->stok ?></label><br>
+                                        <label class="card-text nomer">Stok <?php echo $p->stok ?></label><br>
                                     </div>
                                     <div class="col-md-7">
                                         <label class="card-text harga">Rp. <?php echo number_format($p->harga, 2, ",", ".");?></label><br>
                                     </div>
                                     <div class="col-md-5">
-									    <input type="number" name="quantity" id="<?php echo $p->id_produk;?>" value="1" class="quantity form-control">
+									    <input type="number" name="quantity_produk" id="<?php echo $p->id_produk;?>" value="1" min="1" max="<?=
+										$p->stok ;?>" class="quantity_input form-control">
 								    </div>
                                 </div>
                                 <br>
-                                <button class="add_cart btn btn-success btn-block" data-idproduk="<?php echo $p->id_produk;?>" data-namaproduk="<?php echo $p->nama_produk;?>" data-harga="<?php echo $p->harga;?>">Add To Cart</button>
+                                <button class="add_cart btn btn-success btn-block" data-stok="<?= $p->stok; ?>" data-idproduk="<?php echo $p->id_produk;?>" data-namaproduk="<?php echo $p->nama_produk;?>" data-harga="<?php echo $p->harga;?>">Add To Cart</button>
                             </div>
                         </div>
                     </div>
@@ -58,7 +54,7 @@
 					</thead>
 					<tbody id="detail_cart">
 						
-						</tbody>
+					</tbody>
 					</table>
 					<input class="btn btn-primary btn-outline-light" type="submit" value="Beli">
 			<?php echo form_close() ?>
@@ -74,17 +70,51 @@
 			var id_produk    = $(this).data("idproduk");
 			var nama_produk  = $(this).data("namaproduk");
 			var harga 		 = $(this).data("harga");
-			var quantity     = $('#' + id_produk).val();
+			var quantity     = parseInt($('#' + id_produk).val());
+			var stok_db      = parseInt($(this).data("stok"));
+			var stok_cart 	 = parseInt($('.quantity.'+id_produk).val());
 
-			$.ajax({
-				url : "<?= base_url().'produk/add_cart' ?>",
-				method : "POST",
-				data : {id_produk: id_produk, nama_produk: nama_produk, harga: harga, quantity: quantity},
-				success: function(data){
-					$('#detail_cart').html(data);
+			var stok_cart_total = parseInt(stok_cart + quantity);
 
+			function ajax_addCart()
+			{
+				$.ajax({
+						url : "<?= base_url().'produk/add_cart' ?>",
+						method : "POST",
+						data : {id_produk: id_produk, nama_produk: nama_produk, harga: harga, quantity: quantity},
+						success: function(data){
+							$('#detail_cart').html(data);
+						}
+					});
+			}
+
+			function swal_warning()
+			{
+				Swal.fire({
+						icon: 'warning',
+						title: 'Maaf',
+						text: "Stok tidak mencukupi",
+					});
+			}
+			
+			if(isNaN(stok_cart_total)){
+				if(quantity <= stok_db)
+				{
+					ajax_addCart();
+				} 
+				else if (quantity > stok_db)
+				{
+					swal_warning();
 				}
-			});
+			} 	
+			else if (stok_cart_total <= stok_db)
+			{
+				ajax_addCart();
+			} 
+			else if(stok_cart_total > stok_db) 
+			{
+				swal_warning();
+			} 
 		});
 
 		// Load shopping cart
@@ -93,6 +123,7 @@
 		//Hapus Item Cart
 		$(document).on('click','.hapus_cart',function(){
 			var row_id=$(this).attr("id"); //mengambil row_id dari artibut id
+
 			$.ajax({
 				url : "<?php echo base_url();?>produk/delete_cart",
 				method : "POST",
@@ -102,11 +133,39 @@
 				}
 			});
 		});
+
+		// Update stok cart
+		$(document).on('change','.quantity',function(){
+			var row_id = $(this).attr("id"); //mengambil row_id dari artibut id
+			var stok = $(this).val();
+			var stok_int = parseInt(stok);
+			var stok_db  = $(this).attr("max");
+			var stok_db_int = parseInt(stok_db);
+
+			function ajax_updateCart(){
+				$.ajax({
+					url : "<?php echo base_url();?>produk/update_cart",
+					method : "POST",
+					data : {row_id : row_id, stok : stok} ,
+					success :function(data){
+						$('#detail_cart').html(data);
+					}
+				});
+			}
+
+			if(stok_int > stok_db_int){
+				stok = stok_db
+				ajax_updateCart();
+			} 
+			else if(stok_int < stok_db_int)
+			{
+				ajax_updateCart();
+			}	
+		});
 	});
 </script>
+</body>
 <br>
 <br>
 <br>
 <br>	
-</body>
-</html>

@@ -2,6 +2,7 @@
 
 const flashdata_produk = $('.flashdata_produk').data('flashdata');
 
+// notif create, read, update
 if (flashdata_produk){
     Swal.fire({
         icon: 'success',
@@ -10,6 +11,7 @@ if (flashdata_produk){
     })
 }
 
+// notif delete
 $('.btn_hapus_produk').on('click', function (e) {
 
     e.preventDefault();
@@ -31,9 +33,10 @@ $('.btn_hapus_produk').on('click', function (e) {
 });
 
 
-// Notifikasi Sweetalert untuk CRUD Transaksi
+// === Notifikasi Sweetalert untuk CRUD Transaksi ===
 const flashdata_transaksi = $('.flashdata_transaksi').data('flashdata');
 
+// notif create, read, update
 if (flashdata_transaksi){
     Swal.fire({
         icon: 'success',
@@ -42,6 +45,7 @@ if (flashdata_transaksi){
     })
 }
 
+// notif delete
 $('.btn_hapus_transaksi').on('click', function (e) {
 
     e.preventDefault();
@@ -61,3 +65,15 @@ $('.btn_hapus_transaksi').on('click', function (e) {
         }
       })
 });
+
+// notif create, read, update
+if (flashdata_notifStok){
+    Swal.fire({
+        icon: 'warning',
+        title: 'Maaf',
+        text: flashdata_notifStok,
+    })
+}
+
+// === notif stok tidak cukup ===
+const flashdata_notifStok = $('.notif_stok').data('flashdata');
