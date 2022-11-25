@@ -208,7 +208,7 @@ class Produk extends CI_Controller{
             
 		}
         $this->cart->destroy($items);
-        redirect('dashboard/transaksi');
+        redirect('dashboard/kasir');
     }
 
     function update_cart(){

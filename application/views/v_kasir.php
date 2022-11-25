@@ -1,5 +1,6 @@
 <body>
 <div class="notif_stok" data-flashdata="<?= $this->session->flashdata('notif_stok');?>"></div>
+<div class="flashdata_transaksi" data-flashdata="<?= $this->session->flashdata('transaksi');?>"></div>
 <div class="container"><br/>
 	<h2>Shopping Cart Dengan Ajax dan Codeigniter</h2>
 	<hr/>
@@ -104,6 +105,7 @@
 				} 
 				else if (quantity > stok_db)
 				{
+					$('#' + id_produk).val(stok_db)
 					swal_warning();
 				}
 			} 	
@@ -113,6 +115,7 @@
 			} 
 			else if(stok_cart_total > stok_db) 
 			{
+				$('#' + id_produk).val(stok_db - stok_cart)
 				swal_warning();
 			} 
 		});

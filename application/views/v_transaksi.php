@@ -1,7 +1,6 @@
 <body>
 <div class="container">
     <div class=" table-responsive mt-3">
-    <div class="flashdata_transaksi" data-flashdata="<?= $this->session->flashdata('transaksi');?>"></div>
 
     <!-- Tabel Penjualan -->
         <table class="table table-sm table-bordered table-striped" id="tabeluser">
