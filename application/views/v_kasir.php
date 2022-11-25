@@ -104,6 +104,7 @@
 				} 
 				else if (quantity > stok_db)
 				{
+					$('#' + id_produk).val(stok_db);
 					swal_warning();
 				}
 			} 	
@@ -113,6 +114,7 @@
 			} 
 			else if(stok_cart_total > stok_db) 
 			{
+				$('#' + id_produk).val(stok_db - stok_cart);
 				swal_warning();
 			} 
 		});
